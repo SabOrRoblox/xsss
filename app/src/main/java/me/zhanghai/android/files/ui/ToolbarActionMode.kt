@@ -1,4 +1,3 @@
-
 package me.zhanghai.android.files.ui
 
 import android.animation.Animator
@@ -95,16 +94,16 @@ abstract class ToolbarActionMode(
     fun start(callback: Callback, animate: Boolean = true) {
         this.callback = callback
         onBackPressedCallback.isEnabled = true
-        bar.alpha = 0f
-        bar.visibility = ViewGroup.VISIBLE
-        bar.translationY = -bar.height.toFloat()
-        show(bar, animate)
+        show(animate)
         callback.onToolbarActionModeStarted(this)
     }
 
-    protected fun show(bar: ViewGroup, animate: Boolean) {
+    private fun show(animate: Boolean) {
         currentAnimator?.cancel()
         if (animate) {
+            bar.alpha = 0f
+            bar.visibility = ViewGroup.VISIBLE
+            bar.translationY = -bar.height.toFloat()
             val animator = ValueAnimator.ofFloat(-bar.height.toFloat(), 0f).apply {
                 duration = 280
                 interpolator = DecelerateInterpolator()
@@ -123,6 +122,7 @@ abstract class ToolbarActionMode(
         } else {
             bar.translationY = 0f
             bar.alpha = 1f
+            bar.visibility = ViewGroup.VISIBLE
         }
     }
 
@@ -131,11 +131,11 @@ abstract class ToolbarActionMode(
         this.callback = null
         onBackPressedCallback.isEnabled = false
         toolbar.menu.close()
-        hide(bar, animate)
+        hide(animate)
         callback.onToolbarActionModeFinished(this)
     }
 
-    protected fun hide(bar: ViewGroup, animate: Boolean) {
+    private fun hide(animate: Boolean) {
         currentAnimator?.cancel()
         if (animate) {
             val animator = ValueAnimator.ofFloat(0f, -bar.height.toFloat()).apply {
